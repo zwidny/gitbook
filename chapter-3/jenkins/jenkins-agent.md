@@ -9,7 +9,7 @@
    
    1. 添加Docker Cloud
    
-      ![image](../images/screenshot-127.0.0.1_8080-2021.09.06-15_30_17.png)
+      ![image](../../images/screenshot-127.0.0.1_8080-2021.09.06-15_30_17.png)
       
       一旦添加后， 会出现如上图所示的Docker 配置
    2. 配置Docker Cloud
@@ -18,11 +18,11 @@
    
       1. 配置Docker Cloud
 
-         ![image](../images/docker_cloud_config.png)
+         ![image](../../images/docker_cloud_config.png)
    
       2. 配置Server credentials
 
-         ![image](../images/x_509.png)
+         ![image](../../images/x_509.png)
    
    3. 配置Docker Agent Template
       
@@ -32,4 +32,4 @@
       ```
       图片中可能用的文字[jenkins/ssh-agent:jdk11](https://hub.docker.com/r/jenkins/ssh-agent)
     
-      ![image](../images/docker_template_conf.png)
+      ![image](../../images/docker_template_conf.png)

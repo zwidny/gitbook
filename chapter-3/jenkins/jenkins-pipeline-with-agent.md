@@ -17,9 +17,9 @@ Jenkins 配置docker agent， 且配置了多docker agent template
 ### 假设我们配置了如下Docker agent template
 
 1. docker-ssh-agent
-   ![docker-ssh-agent](../images/docker_agent_template_2.png)
+   ![docker-ssh-agent](../../images/docker_agent_template_2.png)
 2. docker-ssh-agent-with-ansible
-   ![docker-ssh-agent-with-ansible](../images/docker_agent_template_1.png)
+   ![docker-ssh-agent-with-ansible](../../images/docker_agent_template_1.png)
 
 ### 使用方式
 
