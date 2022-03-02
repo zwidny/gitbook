@@ -66,6 +66,10 @@ def batch_download_images(URLS):
     with Pool(n_workers) as p:
         return p.map(load_url, URLS)
 
+    # 或者使任务非阻塞执行
+    with Pool(n_workers) as p:
+        for url in URLS:
+            p.apply_async(load_url, args=(url, ))
 
 if __name__ == '__main__':
     URLS = [

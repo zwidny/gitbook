@@ -10,6 +10,7 @@
     * [python](chapter-2/python/README.md)
         * [concurrence](chapter-2/python/concurrence.md)
 * [Chapter 3 运维开发](chapter-3/README.md)
+    * [DevOps](chapter-3/dev-ops.md)
     * [Docker](chapter-3/docker-on-mac.md)
     * [Jenkins](chapter-3/jenkins/jenkins.md)
         * [Jenkins-Slave](chapter-3/jenkins/jenkins-agent.md)
