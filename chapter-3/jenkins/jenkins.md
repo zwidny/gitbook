@@ -20,32 +20,37 @@
    --restart=always \
    --publish 2376:2376 docker:dind --storage-driver overlay2 --registry-mirror 'https://ktuwsbx0.mirror.aliyuncs.com'
    ```
-4. Customise official Jenkins Docker image, by executing below two steps:
-   1. Create Dockerfile with the following content:
+4. Customise official Jenkins Docker image, by executing below two steps:  
+   方式一: 使用我已经build好的image
       ```shell
-      FROM jenkins/jenkins:lts-jdk11
-      USER root
-      RUN sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list
-      RUN sed -i 's/security.debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list
-      RUN apt-get update && apt-get install -y apt-transport-https \
-      ca-certificates curl gnupg2 \
-      software-properties-common
-      RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
-      RUN apt-key fingerprint 0EBFCD88
-      RUN add-apt-repository \
-      "deb [arch=amd64] https://download.docker.com/linux/debian \
-      $(lsb_release -cs) stable"
-      RUN apt-get update && apt-get install -y docker-ce-cli
-      USER jenkins
-      RUN jenkins-plugin-cli --plugins "blueocean:1.24.7 docker-workflow:1.26" \
-      --jenkins-update-center 'https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json' \
-      --jenkins-experimental-update-center 'https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/experimental/update-center.json' \
-      --jenkins-plugin-info https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/current/plugin-versions.json --verbose
+      docker pull swr.cn-north-4.myhuaweicloud.com/cn/jenkins:lts-jdk11-cn
       ```
-   2. Build a new docker image from this Dockerfile and assign the image a meaningful name, e.g. "jenkins-zh-cn" 
-      ```shell
-      docker build -t jenkins/lts-cn:latest .
-      ```
+   方式二: 自建Dockerfile
+      1. Create Dockerfile with the following content:
+         ```shell
+         FROM jenkins/jenkins:lts-jdk11
+         USER root
+         RUN sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list
+         RUN sed -i 's/security.debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list
+         RUN apt-get update && apt-get install -y apt-transport-https \
+         ca-certificates curl gnupg2 \
+         software-properties-common
+         RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+         RUN apt-key fingerprint 0EBFCD88
+         RUN add-apt-repository \
+         "deb [arch=amd64] https://download.docker.com/linux/debian \
+         $(lsb_release -cs) stable"
+         RUN apt-get update && apt-get install -y docker-ce-cli
+         USER jenkins
+         RUN jenkins-plugin-cli --plugins "blueocean:1.24.7 docker-workflow:1.26" \
+         --jenkins-update-center 'https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json' \
+         --jenkins-experimental-update-center 'https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/experimental/update-center.json' \
+         --jenkins-plugin-info https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/current/plugin-versions.json --verbose
+         ```
+      2. Build a new docker image from this Dockerfile and assign the image a meaningful name, e.g. "jenkins-zh-cn" 
+         ```shell
+         docker build -t jenkins:lts-jdk11-cn .
+         ```
 5. Run as container
    ```shell
    docker run --name jenkins-lts --detach \
@@ -57,6 +62,6 @@
    --publish 8080:8080 --publish 50000:50000 \
    --volume $JENKINS_HOME:/var/jenkins_home \
    --volume $JENKINS_DOCKER_CERTS:/certs/client:ro \
-   jenkins/lts-cn:latest
+   jenkins:lts-jdk11-cn
    ```
 
