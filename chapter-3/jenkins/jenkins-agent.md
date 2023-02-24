@@ -25,11 +25,7 @@
          ![image](../../images/x_509.png)
    
    3. 配置Docker Agent Template
-      
-      按照下图所示配置即可， 需要注意的是在"Connect method"部分，对于"Connect with SSH" 需要打开高级配置， 配置JavaPath: 
-      ```shell
-         /usr/local/openjdk-11/bin/java
-      ```
+
       图片中可能用的文字[jenkins/ssh-agent:jdk11](https://hub.docker.com/r/jenkins/ssh-agent)
     
       ![image](../../images/docker_template_conf.png)
