@@ -18,14 +18,18 @@ vi /etc/docker/daemon.conf
 
 ## 暴露端口
 
-编辑systemd service, 修改ExecStart
+1. 编辑systemd service, 修改ExecStart
 vi /lib/systemd/system/docker.service
-```text
-
-[Service]
-Type=notify
-# the default is not to use systemd for cgroups because the delegate issues still
-# exists and systemd currently does not support the cgroup feature set required
-# for containers run by docker
-ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H fd:// --containerd=/run/containerd/containerd.sock
-```
+   ```text 
+   [Service]
+   Type=notify
+   # the default is not to use systemd for cgroups because the delegate issues still
+   # exists and systemd currently does not support the cgroup feature set required
+   # for containers run by docker
+   ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H fd:// --containerd=/run/containerd/containerd.sock
+   ```
+1. 重启服务
+   ```shell
+   sudo systemctl daemon-reload
+   sudo systemctl restart docker
+   ```
