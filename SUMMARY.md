@@ -15,6 +15,7 @@
     * [DevOps](chapter-3/dev-ops.md)
     * [Docker](chapter-3/docker-on-mac.md)
       * [ImageSource](chapter-3/docker/replace_source.md)
+      * [RemoteAccess](chapter-3/docker/remote_access.md)
     * [Jenkins](chapter-3/jenkins/jenkins.md)
         * [Jenkins-Slave](chapter-3/jenkins/jenkins-agent.md)
         * [Jenkins-pipeline-with-agent](chapter-3/jenkins/jenkins-pipeline-with-agent.md)
