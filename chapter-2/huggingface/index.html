@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>php · GitBook</title>
+        <title>huggingface · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -57,10 +57,10 @@
     <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="../huggingface/" />
+    <link rel="next" href="../../chapter-3/" />
     
     
-    <link rel="prev" href="../python/unittest.html" />
+    <link rel="prev" href="../php/" />
     
 
     </head>
@@ -219,9 +219,9 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.3.4" data-path="./">
+        <li class="chapter " data-level="1.3.4" data-path="../php/">
             
-                <a href="./">
+                <a href="../php/">
             
                     
                     php
@@ -232,9 +232,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3.5" data-path="../huggingface/">
+        <li class="chapter active" data-level="1.3.5" data-path="./">
             
-                <a href="../huggingface/">
+                <a href="./">
             
                     
                     huggingface
@@ -486,7 +486,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="../.." >php</a>
+        <a href="../.." >huggingface</a>
     </h1>
 </div>
 
@@ -501,12 +501,76 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h2 id="install-php-on-mac">Install php on Mac</h2>
-<pre><code class="lang-shell">
-OPENSSL_CFLAGS=&quot;-I/usr/local/opt/openssl@1.1/include&quot; \
-OPENSSL_LIBS=&quot;-L/usr/local/opt/openssl@1.1/lib -lcrypto -lssl&quot;  \
-phpbrew install -j $(nproc)   7.4.32 +gd +mysql +sqlite +bcmath +json +gettext +pdo +curl +zlib=$(brew --prefix zlib) +openssl +mbstring
+                                <h1 id="&#x5982;&#x4F55;&#x5728;&#x8D44;&#x6E90;&#x6709;&#x9650;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#x5BF9;&#x5927;&#x578B;&#x6A21;&#x578B;&#x8FDB;&#x884C;&#x63A8;&#x7406;">&#x5982;&#x4F55;&#x5728;&#x8D44;&#x6E90;&#x6709;&#x9650;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#x5BF9;&#x5927;&#x578B;&#x6A21;&#x578B;&#x8FDB;&#x884C;&#x63A8;&#x7406;</h1>
+<p>&#x672C;&#x6587;&#x4E3B;&#x8981;&#x4ECB;&#x7ECD;&#x5728;&#x5927;&#x6A21;&#x578B;&#x63A8;&#x7406;&#x65F6;&#xFF0C; &#x5F53;&#x9047;&#x5230;&#x5355;&#x5361;&#x65E0;&#x6CD5;&#x5B8C;&#x5168;&#x52A0;&#x8F7D;&#x5927;&#x6A21;&#x578B;&#x65F6;&#xFF0C; &#x5982;&#x4F55;&#x4F7F;&#x5927;&#x6A21;&#x578B;&#x5DE5;&#x4F5C;&#x7684;&#x6B65;&#x9AA4;&#xFF0C; &#x4E3B;&#x8981;&#x4F7F;&#x7528;&#x7684;&#x6280;&#x672F;&#x4E3A;<a href="https://huggingface.co/docs/accelerate/usage_guides/big_modeling" target="_blank">accelerate</a></p>
+<p>&#x672C;&#x6587;&#x5C06;&#x5DF2;<a href="https://huggingface.co/epfl-llm/meditron-7b/tree/main" target="_blank">meditron-7b</a>&#x4E3A;&#x4F8B;</p>
+<h2 id="&#x5148;&#x51B3;&#x6761;&#x4EF6;">&#x5148;&#x51B3;&#x6761;&#x4EF6;</h2>
+<ol>
+<li><p>&#x5B89;&#x88C5;&#x4E86;accelerate</p>
+<pre><code class="lang-shell"> pip install &apos;accelerate==0.25&apos;
 </code></pre>
+</li>
+<li><p>&#x5B89;&#x88C5;&#x4E86;transformers</p>
+<pre><code> pip install transformers
+</code></pre></li>
+</ol>
+<h2 id="&#x5B8C;&#x6574;&#x793A;&#x4F8B;">&#x5B8C;&#x6574;&#x793A;&#x4F8B;</h2>
+<pre><code class="lang-python"><span class="hljs-keyword">import</span> logging
+
+<span class="hljs-keyword">import</span> torch
+<span class="hljs-keyword">from</span> accelerate <span class="hljs-keyword">import</span> (
+    infer_auto_device_map, init_empty_weights, load_checkpoint_and_dispatch
+)
+<span class="hljs-keyword">from</span> huggingface_hub <span class="hljs-keyword">import</span> hf_hub_download
+<span class="hljs-comment"># &#x6839;&#x636E;&#x6A21;&#x578B;config.json&#x786E;&#x8BA4;&#x5176;&#x4E3A;`LlamaForCausalLM`&#x67B6;&#x6784;</span>
+<span class="hljs-keyword">from</span> transformers <span class="hljs-keyword">import</span> LlamaConfig, LlamaForCausalLM, LlamaTokenizer
+
+logging.basicConfig(level=logging.INFO)
+
+
+
+checkpoint = <span class="hljs-string">&quot;epfl-llm/meditron-7b&quot;</span>
+<span class="hljs-comment"># Download the Weights</span>
+weights_location = hf_hub_download(checkpoint, <span class="hljs-string">&quot;model.safetensors.index.json&quot;</span>)
+config = LlamaConfig.from_pretrained(checkpoint)
+<span class="hljs-keyword">with</span> init_empty_weights():
+    <span class="hljs-comment"># &#x52A0;&#x8F7D;&#x5230;meta&#x8BBE;&#x5907;&#x4E2D;&#xFF0C;&#x4E0D;&#x9700;&#x8981;&#x8017;&#x65F6;&#xFF0C;&#x4E0D;&#x9700;&#x8981;&#x6D88;&#x8017;&#x5185;&#x5B58;&#x548C;&#x663E;&#x5B58;</span>
+    model = LlamaForCausalLM._from_config(config, torch_dtype=torch.float16)
+
+
+<span class="hljs-comment"># &#x6BCF;&#x5F20;&#x5361;&#x6700;&#x5927;&#x5141;&#x8BB8;&#x4F7F;&#x7528;15G&#x663E;&#x5B58;</span>
+MAX_MEMORY_PER = <span class="hljs-string">&apos;15Gib&apos;</span>
+CUDA_LIST = [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]
+memory_conf = {int(cuda): MAX_MEMORY_PER <span class="hljs-keyword">for</span> cuda <span class="hljs-keyword">in</span> CUDA_LIST}
+device_map = infer_auto_device_map(
+    model, max_memory=memory_conf, no_split_module_classes=LlamaForCausalLM._no_split_modules)  <span class="hljs-comment"># &#x81EA;&#x52A8;&#x5212;&#x5206;&#x6BCF;&#x4E2A;&#x5C42;&#x7684;&#x8BBE;&#x5907;</span>
+logging.info(F<span class="hljs-string">&quot;device_map: {device_map}&quot;</span>)
+
+
+<span class="hljs-comment"># Load the checkpoint and dispatch it to the right devices</span>
+model = load_checkpoint_and_dispatch(
+    model, weights_location, device_map=device_map
+)
+tokenizer = LlamaTokenizer.from_pretrained(checkpoint)
+
+
+<span class="hljs-comment"># &#x5F00;&#x59CB;&#x63A8;&#x7406;</span>
+torch.set_grad_enabled(<span class="hljs-keyword">False</span>)
+msg = <span class="hljs-string">&apos;&apos;</span>
+inputs = tokenizer(<span class="hljs-string">&quot;Cold, fever of 40 degrees&quot;</span>, return_tensors=<span class="hljs-string">&quot;pt&quot;</span>)
+inputs = inputs.to(model.device)
+
+<span class="hljs-comment"># &#x8BBE;&#x7F6E;attention_mask&#x548C;pad_token_id</span>
+attention_mask = torch.ones(
+    inputs[<span class="hljs-string">&quot;input_ids&quot;</span>].shape, dtype=torch.long, device=model.device)
+pad_token_id = tokenizer.pad_token_id
+output = model.generate(inputs[<span class="hljs-string">&quot;input_ids&quot;</span>], max_new_tokens=<span class="hljs-number">32</span>*<span class="hljs-number">10</span>,
+                        attention_mask=attention_mask, pad_token_id=pad_token_id)
+decoded_output = tokenizer.decode(output[<span class="hljs-number">0</span>].tolist())
+print(decoded_output)
+</code></pre>
+<h3 id="1-&#x786E;&#x8BA4;&#x6A21;&#x578B;&#x67B6;&#x6784;">1. &#x786E;&#x8BA4;&#x6A21;&#x578B;&#x67B6;&#x6784;</h3>
+<p>&#x4E00;&#x822C;&#x5927;&#x6A21;&#x578B;&#x4F1A;&#x6709;&#x4E00;&#x4E2A;config.json</p>
 
                                 
                                 </section>
@@ -534,12 +598,12 @@ phpbrew install -j $(nproc)   7.4.32 +gd +mysql +sqlite +bcmath +json +gettext +
 
             
                 
-                <a href="../python/unittest.html" class="navigation navigation-prev " aria-label="Previous page: 单元测试">
+                <a href="../php/" class="navigation navigation-prev " aria-label="Previous page: php">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="../huggingface/" class="navigation navigation-next " aria-label="Next page: huggingface">
+                <a href="../../chapter-3/" class="navigation navigation-next " aria-label="Next page: Chapter 3 运维开发">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -550,7 +614,7 @@ phpbrew install -j $(nproc)   7.4.32 +gd +mysql +sqlite +bcmath +json +gettext +
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"php","level":"1.3.4","depth":2,"next":{"title":"huggingface","level":"1.3.5","depth":2,"path":"chapter-2/huggingface/README.md","ref":"chapter-2/huggingface/README.md","articles":[]},"previous":{"title":"单元测试","level":"1.3.3.2","depth":3,"path":"chapter-2/python/unittest.md","ref":"chapter-2/python/unittest.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter-2/php/README.md","mtime":"2023-02-23T12:13:04.898Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2024-01-05T03:56:32.805Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"huggingface","level":"1.3.5","depth":2,"next":{"title":"Chapter 3 运维开发","level":"1.4","depth":1,"path":"chapter-3/README.md","ref":"chapter-3/README.md","articles":[{"title":"DevOps","level":"1.4.1","depth":2,"path":"chapter-3/dev-ops.md","ref":"chapter-3/dev-ops.md","articles":[]},{"title":"Docker","level":"1.4.2","depth":2,"path":"chapter-3/docker-on-mac.md","ref":"chapter-3/docker-on-mac.md","articles":[{"title":"ImageSource","level":"1.4.2.1","depth":3,"path":"chapter-3/docker/replace_source.md","ref":"chapter-3/docker/replace_source.md","articles":[]},{"title":"RemoteAccess","level":"1.4.2.2","depth":3,"path":"chapter-3/docker/remote_access.md","ref":"chapter-3/docker/remote_access.md","articles":[]}]},{"title":"Jenkins","level":"1.4.3","depth":2,"path":"chapter-3/jenkins/jenkins.md","ref":"chapter-3/jenkins/jenkins.md","articles":[{"title":"Jenkins-Slave","level":"1.4.3.1","depth":3,"path":"chapter-3/jenkins/jenkins-agent.md","ref":"chapter-3/jenkins/jenkins-agent.md","articles":[]},{"title":"Jenkins-pipeline-with-agent","level":"1.4.3.2","depth":3,"path":"chapter-3/jenkins/jenkins-pipeline-with-agent.md","ref":"chapter-3/jenkins/jenkins-pipeline-with-agent.md","articles":[]}]},{"title":"常用MYSQL命令","level":"1.4.4","depth":2,"path":"chapter-3/mysql.md","ref":"chapter-3/mysql.md","articles":[]},{"title":"Redis","level":"1.4.5","depth":2,"path":"chapter-3/redis.md","ref":"chapter-3/redis.md","articles":[]},{"title":"openssl","level":"1.4.6","depth":2,"path":"chapter-3/openssl.md","ref":"chapter-3/openssl.md","articles":[]},{"title":"opened-port","level":"1.4.7","depth":2,"path":"chapter-3/opened-port.md","ref":"chapter-3/opened-port.md","articles":[]}]},"previous":{"title":"php","level":"1.3.4","depth":2,"path":"chapter-2/php/README.md","ref":"chapter-2/php/README.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter-2/huggingface/README.md","mtime":"2024-01-05T03:15:03.350Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2024-01-05T03:56:32.805Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>
