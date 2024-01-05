@@ -13,12 +13,13 @@
     ```
 
 1. 安装了transformers
-   
-    ```
+
+    ```shell
     pip install transformers
     ```
 
 ## 完整示例
+
 ```python
 import logging
 
@@ -75,9 +76,3 @@ decoded_output = tokenizer.decode(output[0].tolist())
 print(decoded_output)
 
 ```
-
-### 1. 确认模型架构
-
-一般大模型会有一个config.json
-
-
