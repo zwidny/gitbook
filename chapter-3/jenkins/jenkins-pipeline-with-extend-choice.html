@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>RemoteAccess · GitBook</title>
+        <title>Pipeline-with-multi-choice · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -57,10 +57,10 @@
     <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="../jenkins/jenkins.html" />
+    <link rel="next" href="../mysql.html" />
     
     
-    <link rel="prev" href="replace_source.html" />
+    <link rel="prev" href="jenkins-pipeline-with-agent.html" />
     
 
     </head>
@@ -291,9 +291,9 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.4.2.1" data-path="replace_source.html">
+        <li class="chapter " data-level="1.4.2.1" data-path="../docker/replace_source.html">
             
-                <a href="replace_source.html">
+                <a href="../docker/replace_source.html">
             
                     
                     ImageSource
@@ -304,9 +304,9 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.4.2.2" data-path="remote_access.html">
+        <li class="chapter " data-level="1.4.2.2" data-path="../docker/remote_access.html">
             
-                <a href="remote_access.html">
+                <a href="../docker/remote_access.html">
             
                     
                     RemoteAccess
@@ -322,9 +322,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.3" data-path="../jenkins/jenkins.html">
+        <li class="chapter " data-level="1.4.3" data-path="jenkins.html">
             
-                <a href="../jenkins/jenkins.html">
+                <a href="jenkins.html">
             
                     
                     Jenkins
@@ -336,9 +336,9 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.4.3.1" data-path="../jenkins/jenkins-agent.html">
+        <li class="chapter " data-level="1.4.3.1" data-path="jenkins-agent.html">
             
-                <a href="../jenkins/jenkins-agent.html">
+                <a href="jenkins-agent.html">
             
                     
                     Jenkins-Slave
@@ -349,9 +349,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.3.2" data-path="../jenkins/jenkins-pipeline-with-agent.html">
+        <li class="chapter " data-level="1.4.3.2" data-path="jenkins-pipeline-with-agent.html">
             
-                <a href="../jenkins/jenkins-pipeline-with-agent.html">
+                <a href="jenkins-pipeline-with-agent.html">
             
                     
                     Jenkins-pipeline-with-agent
@@ -362,9 +362,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.3.3" data-path="../jenkins/jenkins-pipeline-with-extend-choice.html">
+        <li class="chapter active" data-level="1.4.3.3" data-path="jenkins-pipeline-with-extend-choice.html">
             
-                <a href="../jenkins/jenkins-pipeline-with-extend-choice.html">
+                <a href="jenkins-pipeline-with-extend-choice.html">
             
                     
                     Pipeline-with-multi-choice
@@ -499,7 +499,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="../.." >RemoteAccess</a>
+        <a href="../.." >Pipeline-with-multi-choice</a>
     </h1>
 </div>
 
@@ -514,36 +514,106 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="&#x914D;&#x7F6E;docker-&#x4F7F;&#x5176;&#x53EF;&#x4EE5;&#x8FDC;&#x7A0B;&#x8BBF;&#x95EE;">&#x914D;&#x7F6E;docker &#x4F7F;&#x5176;&#x53EF;&#x4EE5;&#x8FDC;&#x7A0B;&#x8BBF;&#x95EE;</h1>
-<h2 id="&#x955C;&#x50CF;&#x52A0;&#x901F;">&#x955C;&#x50CF;&#x52A0;&#x901F;</h2>
-<p>&#x7F16;&#x8F91;dockerd&#x914D;&#x7F6E;&#x6587;&#x4EF6;
-vi /etc/docker/daemon.conf</p>
-<pre><code class="lang-json">{
-  <span class="hljs-string">&quot;runtimes&quot;</span>: {
-    <span class="hljs-string">&quot;nvidia&quot;</span>: {
-      <span class="hljs-string">&quot;path&quot;</span>: <span class="hljs-string">&quot;nvidia-container-runtime&quot;</span>,
-      <span class="hljs-string">&quot;runtimeArgs&quot;</span>: []
+                                <h1 id="jenkins-pipeline&#x53C2;&#x6570;&#x652F;&#x6301;multi-choice">Jenkins pipeline&#x53C2;&#x6570;&#x652F;&#x6301;multi-choice</h1>
+<pre><code class="lang-groovy">
+<span class="hljs-comment">// pipeline_test_zhao&#x6D41;&#x6C34;&#x7EBF;Zhao&#x6D4B;&#x8BD5;</span>
+pipeline {
+    agent any
+    parameters {
+        <span class="hljs-comment">// &#x591A;&#x9009;&#x652F;&#x6301;</span>
+        extendedChoice( 
+<span class="hljs-symbol">        defaultValue:</span> <span class="hljs-string">&apos;&apos;</span>, 
+<span class="hljs-symbol">        description:</span> <span class="hljs-string">&apos;&#x9700;&#x8981;&#x5207;&#x6362;&#x7248;&#x672C;&#x7684;&#x73AF;&#x5883;&apos;</span>, 
+<span class="hljs-symbol">        multiSelectDelimiter:</span> <span class="hljs-string">&apos;,&apos;</span>, 
+<span class="hljs-symbol">        name:</span> <span class="hljs-string">&apos;ENV_CHOICE&apos;</span>, 
+<span class="hljs-symbol">        quoteValue:</span> <span class="hljs-literal">false</span>, 
+<span class="hljs-symbol">        saveJSONParameterToFile:</span> <span class="hljs-literal">false</span>, 
+<span class="hljs-symbol">        type:</span> <span class="hljs-string">&apos;PT_CHECKBOX&apos;</span>, 
+<span class="hljs-symbol">        value:</span><span class="hljs-string">&apos;Resource,Release,Online&apos;</span>, 
+<span class="hljs-symbol">        visibleItemCount:</span> <span class="hljs-number">3</span>)
+
     }
-  },
-  <span class="hljs-string">&quot;registry-mirrors&quot;</span>:[<span class="hljs-string">&quot;https://22e5a8dbd7d44606bc21701144789d02.mirror.swr.myhuaweicloud.com&quot;</span>, <span class="hljs-string">&quot;https://almtd3fa.mirror.aliyuncs.com&quot;</span>]
+    stages {
+        stage(<span class="hljs-string">&apos;&#x521D;&#x59CB;&#x5316;&apos;</span>) {
+            steps {
+                script {
+                    PLATFORM_INFO = [:]
+                }
+            }
+        }
+        stage(<span class="hljs-string">&apos;&#x7F8E;&#x672F;&#x8D44;&#x6E90;&#x6253;&#x5305;&apos;</span>) {
+            matrix {
+                agent {
+                    node {
+                        label <span class="hljs-string">&apos;mv_ingame&apos;</span>
+                        customWorkspace <span class="hljs-string">&quot;workspace/${PLATFORM}&quot;</span>
+                    }
+                }
+                axes {
+                    axis {
+                        name <span class="hljs-string">&apos;PLATFORM&apos;</span>
+                        values <span class="hljs-string">&apos;ios&apos;</span>, <span class="hljs-string">&apos;android&apos;</span>
+                    }
+                }
+                environment {
+                    GIT_PERSISTENT_BRANCH = <span class="hljs-string">&quot;mv-ingame-${PLATFORM}-${params.git_branch_name}&quot;</span>
+                }
+                stages {
+                    stage(<span class="hljs-string">&apos;&#x914D;&#x7F6E;&#x521D;&#x59CB;&#x5316;&apos;</span>) {
+                        steps {
+                            script {
+                                PLATFORM_INFO[PLATFORM] = [:]
+                                PLATFORM_INFO[PLATFORM].update = <span class="hljs-literal">false</span>
+                                echo <span class="hljs-string">&quot;GIT_PERSISTENT_BRANCH: ${GIT_PERSISTENT_BRANCH}&quot;</span>
+                            }
+                        }
+                    }
+                    stage(<span class="hljs-string">&quot;&#x56DE;&#x663E;&#x914D;&#x7F6E;&quot;</span>) {
+                        steps {
+                            script {
+                                echo <span class="hljs-string">&quot;$PLATFORM ${PLATFORM_INFO[PLATFORM]}&quot;</span>
+
+                            }
+                        }
+                    }
+                    stage(<span class="hljs-string">&apos;Get Current Build Info&apos;</span>) {
+                        steps {
+                            echo <span class="hljs-string">&quot;Current build info: ${currentBuild.currentResult}&quot;</span>
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+    post {
+        always {
+            script {
+                dir(<span class="hljs-string">&quot;pyframe-pipeline&quot;</span>) {
+                    <span class="hljs-comment">// &#x4F7F;&#x7528;build-user-vars-plugin&#x63D2;&#x4EF6;&#x63D0;&#x4F9B;&#x7684;&#x6B65;&#x9AA4;&#x6765;&#x83B7;&#x53D6;&#x6784;&#x5EFA;&#x7528;&#x6237;</span>
+                    wrap([<span class="hljs-string">$class:</span> <span class="hljs-string">&apos;BuildUser&apos;</span>]) {
+                        env.CURRENT_RESULT = currentBuild.currentResult
+                        env.BUILD_USER = <span class="hljs-string">&quot;${BUILD_USER}&quot;</span>
+                        env.BUILD_ID = <span class="hljs-string">&quot;${BUILD_ID}&quot;</span>
+                        env.DURATION = currentBuild.duration
+                        env.DISPLAY_NAME = currentBuild.displayName
+                        <span class="hljs-comment">// &#x5B9A;&#x65F6;&#x89E6;&#x53D1;&#x65F6;&#xFF0C;&#x83B7;&#x53D6;&#x4E0D;&#x5230;&#x6784;&#x5EFA;&#x7528;&#x6237;&#x7684;&#x90AE;&#x7BB1;, &#x8FDC;&#x7A0B;&#x6784;&#x5EFA;&#x89E6;&#x53D1;&#x65F6;, &#x4E5F;&#x83B7;&#x53D6;&#x4E0D;&#x5230;&#x6784;&#x5EFA;&#x90AE;&#x7BB1;</span>
+                        <span class="hljs-keyword">try</span> {
+                            env.BUILD_USER_EMAIL = <span class="hljs-string">&quot;${BUILD_USER_EMAIL}&quot;</span>
+                        } <span class="hljs-keyword">catch</span> (exc) {
+                            echo <span class="hljs-string">&quot;&#x83B7;&#x53D6;&#x4E0D;&#x5230;&#x6784;&#x5EFA;&#x7684;&#x7528;&#x6237;&#x90AE;&#x7BB1;&quot;</span>
+                            env.BUILD_USER_EMAIL = <span class="hljs-string">&quot;&quot;</span>
+                        }
+                    }
+                    println currentBuild.fullDisplayName
+                    <span class="hljs-keyword">def</span> out = bat (<span class="hljs-string">script:</span> <span class="hljs-string">&quot;&quot;&quot;python -c &quot;import os; print(os.environ)&quot; &quot;&quot;&quot;</span>, <span class="hljs-string">returnStdout:</span> <span class="hljs-literal">true</span>)
+                    println out
+                }
+            }
+        }
+    }
 }
 </code></pre>
-<h2 id="&#x66B4;&#x9732;&#x7AEF;&#x53E3;">&#x66B4;&#x9732;&#x7AEF;&#x53E3;</h2>
-<ol>
-<li>&#x7F16;&#x8F91;systemd service, &#x4FEE;&#x6539;ExecStart
-vi /lib/systemd/system/docker.service<pre><code class="lang-text">[Service]
-Type=notify
-# the default is not to use systemd for cgroups because the delegate issues still
-# exists and systemd currently does not support the cgroup feature set required
-# for containers run by docker
-ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H fd:// --containerd=/run/containerd/containerd.sock
-</code></pre>
-</li>
-<li>&#x91CD;&#x542F;&#x670D;&#x52A1;<pre><code class="lang-shell">sudo systemctl daemon-reload
-sudo systemctl restart docker
-</code></pre>
-</li>
-</ol>
 
                                 
                                 </section>
@@ -571,12 +641,12 @@ sudo systemctl restart docker
 
             
                 
-                <a href="replace_source.html" class="navigation navigation-prev " aria-label="Previous page: ImageSource">
+                <a href="jenkins-pipeline-with-agent.html" class="navigation navigation-prev " aria-label="Previous page: Jenkins-pipeline-with-agent">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="../jenkins/jenkins.html" class="navigation navigation-next " aria-label="Next page: Jenkins">
+                <a href="../mysql.html" class="navigation navigation-next " aria-label="Next page: 常用MYSQL命令">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -587,7 +657,7 @@ sudo systemctl restart docker
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"RemoteAccess","level":"1.4.2.2","depth":3,"next":{"title":"Jenkins","level":"1.4.3","depth":2,"path":"chapter-3/jenkins/jenkins.md","ref":"chapter-3/jenkins/jenkins.md","articles":[{"title":"Jenkins-Slave","level":"1.4.3.1","depth":3,"path":"chapter-3/jenkins/jenkins-agent.md","ref":"chapter-3/jenkins/jenkins-agent.md","articles":[]},{"title":"Jenkins-pipeline-with-agent","level":"1.4.3.2","depth":3,"path":"chapter-3/jenkins/jenkins-pipeline-with-agent.md","ref":"chapter-3/jenkins/jenkins-pipeline-with-agent.md","articles":[]},{"title":"Pipeline-with-multi-choice","level":"1.4.3.3","depth":3,"path":"chapter-3/jenkins/jenkins-pipeline-with-extend-choice.md","ref":"chapter-3/jenkins/jenkins-pipeline-with-extend-choice.md","articles":[]}]},"previous":{"title":"ImageSource","level":"1.4.2.1","depth":3,"path":"chapter-3/docker/replace_source.md","ref":"chapter-3/docker/replace_source.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter-3/docker/remote_access.md","mtime":"2024-05-27T03:34:43.614Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2024-05-27T07:46:40.874Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Pipeline-with-multi-choice","level":"1.4.3.3","depth":3,"next":{"title":"常用MYSQL命令","level":"1.4.4","depth":2,"path":"chapter-3/mysql.md","ref":"chapter-3/mysql.md","articles":[]},"previous":{"title":"Jenkins-pipeline-with-agent","level":"1.4.3.2","depth":3,"path":"chapter-3/jenkins/jenkins-pipeline-with-agent.md","ref":"chapter-3/jenkins/jenkins-pipeline-with-agent.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter-3/jenkins/jenkins-pipeline-with-extend-choice.md","mtime":"2024-05-27T03:38:58.838Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2024-05-27T07:46:40.874Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>
