@@ -20,6 +20,7 @@
     * [Jenkins](chapter-3/jenkins/jenkins.md)
         * [Jenkins-Slave](chapter-3/jenkins/jenkins-agent.md)
         * [Jenkins-pipeline-with-agent](chapter-3/jenkins/jenkins-pipeline-with-agent.md)
+        * [Pipeline-with-multi-choice](chapter-3/jenkins/jenkins-pipeline-with-extend-choice.md)
     * [常用MYSQL命令](chapter-3/mysql.md)
     * [Redis](chapter-3/redis.md)
     * [openssl](chapter-3/openssl.md)
